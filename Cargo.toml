@@ -1,0 +1,10 @@
+[package]
+name = "fcpi"
+version = "0.0.1"
+authors = [ "Blake Loring <blake_l@parsed.uk>" ]
+
+[dependencies.fccore]
+path = "core"
+
+[dependencies.fcwebserve]
+path = "webserve"

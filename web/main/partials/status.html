@@ -1,0 +1,48 @@
+<div class="container">
+	<div class="small-gap panel panel-default">
+	  <div class="panel-body">
+		<h2>Status - {{rest.live_text}} (Alive: {{rest.status.alive}})</h2>
+      	<hr class="featurette-divider">
+
+      	<div class="row" style="text-align: center;">
+      		<h1>TTL: {{rest.status.countdown}}</h1>
+      	</div>
+
+      	<hr class="featurette-divider">
+
+		<div class="row">
+			<div class="col-xs-12 center-block">
+				<button class="center-block btn btn-danger" style="width: 300px;">Begin Countdown</button>
+			</div>
+		</div>
+
+      	<hr class="featurette-divider">
+		<div class="row"><b class="col-xs-12" style="text-align: center;">{{rest.armed_text}}</b></div>
+      	<hr class="featurette-divider">
+
+      	<div class="row" style="margin-bottom: 10px;">
+			<div class="col-xs-12 center-block">
+	      		<button class="btn btn-success center-block" style="width: 300px;" ng-click="arm();">Toggle ARM</button>
+	      	</div>
+      	</div>
+
+		<hr class="featurette-divider">
+		<b>Reduced Log</b>
+      	<hr class="featurette-divider">
+		<p><pre>{{rest.logs_min}}</pre></p>
+
+      	<hr class="featurette-divider">
+      	
+      	<div class="row" style="margin-bottom: 10px;">
+	      	<a href="./#/logs" class="col-xs-12 btn btn-default" ng-click="arm();">Full logs</a>
+      	</div>
+
+		<hr class="featurette-divider">
+		<b>Kill FC</b>
+		<hr class="featurette-divider">
+		<div class="row" style="margin-bottom: 10px;">
+			<a class="col-xs-2 btn btn-success" href="{{api_url}}/kill">Kill</a>
+      	</div>
+	  </div>
+	</div>
+</div>

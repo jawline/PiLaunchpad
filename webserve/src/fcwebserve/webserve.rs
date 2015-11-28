@@ -12,6 +12,7 @@ use fcwebserve::core_config::get_config;
 use fcwebserve::status::status_report;
 use fcwebserve::arming::*;
 use fcwebserve::wlog::*;
+use fcwebserve::countdown::*;
 
 const TAG : &'static str = "webserve";
 
@@ -30,6 +31,8 @@ fn page_handler(req : &mut Request, core : &Arc<Mutex<Core>>) -> IronResult<Resp
         let mut response = match base_cmd {
          "arm" => arm_core(core),
          "disarm" => disarm_core(core),
+         "begin_countdown" => begin_countdown(core),
+         "end_countdown" => end_countdown(core),
          "log" => get_log(core),
          "log_reduced" => get_log_min(core),
          "kill" => kill_core(core),

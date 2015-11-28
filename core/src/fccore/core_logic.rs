@@ -15,7 +15,7 @@ fn fccore_thread_loop(core_ref: Arc<Mutex<Core>>) {
 
     while core_ref.lock().unwrap().alive {
     	core_ref.lock().unwrap().update();
-    	sleep_ms(50);
+    	sleep_ms(25);
     }
 
     core_ref.lock().unwrap().log_mut().add(TAG, "Core is no longer alive, logic thread exit");

@@ -13,7 +13,8 @@ struct Status {
     pub armed_switch: bool,
     pub armed_cmd: bool,
     pub armed: bool,
-    pub countdown: String
+    pub countdown: String,
+    pub is_counting_down: bool
 }
 
 impl Status {
@@ -24,6 +25,7 @@ impl Status {
             armed_switch: core.armed_switch(),
             armed_cmd: core.armed_cmd(),
             armed: core.armed(),
+            is_counting_down: core.is_counting_down,
             countdown: if core.is_counting_down { core.countdown_time.to_string() } else { "Unplanned".to_string() }
         }
     }

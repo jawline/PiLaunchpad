@@ -18,7 +18,7 @@ pub struct Core {
     pub alive : bool,
 
     pub is_counting_down: bool,
-    pub countdown_time: f64,
+    time_to_launch: time::Tm,
     
     /**
      * Base ARM requirement, safety switch must be switched to on
@@ -60,7 +60,7 @@ impl Core {
             armed_command: false,
             alive: true,
             is_counting_down: false,
-            countdown_time: 0.0,
+            time_to_launch: time::now(),
             armed_status_led: ConfigLed::new(&config.armed_led),
             armed_safety_switch: ConfigButton::new(&config.arm_switch),
             log: Log::new(&format!("{}log{}", LOG_DIR, time::now().to_timespec().sec), config.log_config.log_limit),
@@ -106,6 +106,10 @@ impl Core {
         self.armed_changed();
     }
 
+    pub fn countdown_time(&self) -> i64 {
+        (self.time_to_launch - time::now()).num_seconds()
+    }
+
     pub fn update(&mut self) {
     
         //Read from the physical safety
@@ -124,6 +128,27 @@ impl Core {
             self.log_mut().add(TAG, "set core armed_command to false as switch is false");
             self.armed_command = false;
             self.armed_changed();
+        }
+    }
+    pub fn begin_countdown(&mut self) {
+        if !self.armed() {
+            self.log_mut().add(TAG, "Cannot start countdown. Not ARMED");
+        } else {
+            if self.is_counting_down {
+                self.log_mut().add(TAG, "Resetting countdown");
+            } else {
+                self.log_mut().add(TAG, "Starting countdown");
+            }
+
+            self.is_counting_down = true;
+            self.time_to_launch = time::now() + time::Duration::seconds(self.config.countdown_time);
+        }
+    }
+
+    pub fn end_countdown(&mut self) {
+        if self.is_counting_down {
+            self.log_mut().add(TAG, "Manual countdown end");
+            self.is_counting_down = false;
         }
     }
 

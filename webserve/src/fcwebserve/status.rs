@@ -26,7 +26,7 @@ impl Status {
             armed_cmd: core.armed_cmd(),
             armed: core.armed(),
             is_counting_down: core.is_counting_down,
-            countdown: if core.is_counting_down { core.countdown_time.to_string() } else { "Unplanned".to_string() }
+            countdown: if core.is_counting_down { core.countdown_time().to_string() } else { "Unplanned".to_string() }
         }
     }
 }

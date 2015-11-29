@@ -52,6 +52,18 @@ angular.module('RestServices', []).factory('$restService', function($http) {
 	reloadLogMin();
 	reloadConfig();
 
+	rest.countdown = function(cb) {
+		if (rest.status.is_counting_down) {
+			$http.get(API_URL + "/end_countdown").success(function(data) {
+				cb(data);
+			});
+		} else {
+			$http.get(API_URL + "/begin_countdown").success(function(data) {
+				cb(data);
+			});
+		}
+	}
+
 	rest.arm = function(cb) {
 		$http.get(API_URL + "/arm").success(function(data) {
 			cb(data);

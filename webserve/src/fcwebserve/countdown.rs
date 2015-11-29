@@ -7,11 +7,11 @@ use fccore::Core;
 const TAG : &'static str = "countdown";
 
 pub fn begin_countdown(core_ref : &Arc<Mutex<Core>>) -> Response {
-    let mut core = core_ref.lock().unwrap();
+    core_ref.lock().unwrap().begin_countdown();
     Response::with((status::Ok, "Ok".to_string()))
 }
 
 pub fn end_countdown(core_ref : &Arc<Mutex<Core>>) -> Response {
-    let mut core = core_ref.lock().unwrap();
+    core_ref.lock().unwrap().end_countdown();
     Response::with((status::Ok, "Ok".to_string()))
 }

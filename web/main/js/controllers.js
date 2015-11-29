@@ -26,6 +26,10 @@ function StatusCtrl($scope, $restService) {
 		}
 	}
 
+	$scope.countdown = function() {
+		$scope.rest.countdown();
+	}
+
 	$scope.disarm = function() {
 		$restService.disarm(function(data) {
 			$scope.arm_result = data;

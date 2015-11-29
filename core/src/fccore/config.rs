@@ -26,7 +26,7 @@ pub struct Config {
     pub armed_led: Light,
     pub arm_switch: Switch,
     pub log_config: LogConfig,
-    pub countdown_time: f64
+    pub countdown_time: i64
 }
 
 impl Config {

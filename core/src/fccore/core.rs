@@ -17,8 +17,8 @@ pub struct Core {
      */
     pub alive : bool,
 
-    pub is_counting_down: bool,
-    time_to_launch: time::Tm,
+    pub launched: bool,
+    time_to_launch: Option<time::Tm>,
     
     /**
      * Base ARM requirement, safety switch must be switched to on
@@ -59,8 +59,8 @@ impl Core {
             armed_switch: false,
             armed_command: false,
             alive: true,
-            is_counting_down: false,
-            time_to_launch: time::now(),
+            launched: false,
+            time_to_launch: None,
             armed_status_led: ConfigLed::new(&config.armed_led),
             armed_safety_switch: ConfigButton::new(&config.arm_switch),
             log: Log::new(&format!("{}log{}", LOG_DIR, time::now().to_timespec().sec), config.log_config.log_limit),
@@ -73,7 +73,13 @@ impl Core {
     fn armed_changed(&mut self) {
         self.log.add(TAG, "armed_changed triggered");
         self.armed_status_led.set(self.armed());
+
+        if !self.armed() {
+            self.end_countdown();
+        }
     }
+
+    pub fn is_counting_down(&self) -> bool { self.time_to_launch.is_some() }
   
     /**
      * true if the device is fully armed
@@ -107,7 +113,10 @@ impl Core {
     }
 
     pub fn countdown_time(&self) -> i64 {
-        (self.time_to_launch - time::now()).num_seconds()
+        match self.time_to_launch {
+            Some(time) => (time - time::now()).num_seconds(),
+            None => 999999
+        }
     }
 
     pub fn update(&mut self) {
@@ -129,26 +138,37 @@ impl Core {
             self.armed_command = false;
             self.armed_changed();
         }
+
+        if self.is_counting_down() && self.countdown_time() < 0 && !self.launched {
+            self.launch();
+            self.launched = true;
+        }
     }
+
+    fn launch(&mut self) {
+        self.log_mut().add(TAG, "I would launch here");
+    }
+
     pub fn begin_countdown(&mut self) {
         if !self.armed() {
             self.log_mut().add(TAG, "Cannot start countdown. Not ARMED");
         } else {
-            if self.is_counting_down {
+
+            if self.is_counting_down() {
                 self.log_mut().add(TAG, "Resetting countdown");
             } else {
                 self.log_mut().add(TAG, "Starting countdown");
             }
 
-            self.is_counting_down = true;
-            self.time_to_launch = time::now() + time::Duration::seconds(self.config.countdown_time);
+            self.launched = false;
+            self.time_to_launch = Some(time::now() + time::Duration::seconds(self.config.countdown_time));
         }
     }
 
     pub fn end_countdown(&mut self) {
-        if self.is_counting_down {
+        if self.is_counting_down() {
             self.log_mut().add(TAG, "Manual countdown end");
-            self.is_counting_down = false;
+            self.time_to_launch = None;
         }
     }
 

@@ -14,6 +14,7 @@ angular.module('RestServices', []).factory('$restService', function($http) {
 		$http.get(API_URL + "/status").success(function(data) {
 			rest.status = data;
 			rest.armed_text = rest.status.armed ? "Armed" : "Disarmed";
+			rest.countdown_btn_text = rest.status.is_counting_down ? "End Countdown" : "Begin Countdown";
 			rest.live_text = "Live (Updating)";
 		}).then(function() {
 			setTimeout(reloadStatus, 100);

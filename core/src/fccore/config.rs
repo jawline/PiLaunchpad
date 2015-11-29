@@ -24,6 +24,7 @@ pub struct LogConfig {
 #[derive(RustcEncodable, RustcDecodable)]
 pub struct Config {
     pub armed_led: Light,
+    pub fire_out: Light,
     pub arm_switch: Switch,
     pub log_config: LogConfig,
     pub countdown_time: i64

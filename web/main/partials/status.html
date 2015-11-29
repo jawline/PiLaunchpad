@@ -5,14 +5,14 @@
       	<hr class="featurette-divider">
 
       	<div class="row" style="text-align: center;">
-      		<h1>{{rest.status.countdown}}</h1>
+      		<h4>{{rest.status.countdown}}</h4>
       	</div>
 
       	<hr class="featurette-divider">
 
 		<div class="row">
 			<div class="col-xs-12 center-block">
-				<button class="center-block btn btn-danger" ng-click="countdown();" style="width: 300px;">Begin Countdown</button>
+				<button class="center-block btn btn-danger" ng-click="countdown();" style="width: 300px;">{{rest.countdown_btn_text}}</button>
 			</div>
 		</div>
 
@@ -20,7 +20,7 @@
 		<div class="row"><b class="col-xs-12" style="text-align: center;">{{rest.armed_text}}</b></div>
       	<hr class="featurette-divider">
 
-      	<div class="row" style="margin-bottom: 10px;">
+      	<div class="row">
 			<div class="col-xs-12 center-block">
 	      		<button class="btn btn-success center-block" style="width: 300px;" ng-click="arm();">Toggle ARM</button>
 	      	</div>
@@ -33,7 +33,7 @@
 
       	<hr class="featurette-divider">
       	
-      	<div class="row" style="margin-bottom: 10px;">
+      	<div class="row">
 	      	<a href="./#/logs" class="col-xs-12 btn btn-default" ng-click="arm();">Full logs</a>
       	</div>
 	  </div>

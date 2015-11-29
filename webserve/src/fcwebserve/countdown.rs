@@ -1,7 +1,6 @@
 use iron::prelude::*;
 use std::sync::{Arc, Mutex};
 use iron::status;
-use iron::mime::Mime;
 use fccore::Core;
 
 const TAG : &'static str = "countdown";

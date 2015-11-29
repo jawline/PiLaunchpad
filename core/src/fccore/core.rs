@@ -3,6 +3,7 @@
 use fccore::config::Config;
 use fccore::configled::ConfigLed;
 use fccore::configbutton::ConfigButton;
+use std::thread::sleep_ms;
 use simplelog::Log;
 
 use time;
@@ -17,8 +18,20 @@ pub struct Core {
      */
     pub alive : bool,
 
+    /**
+     * Has the current countdown triggered a launch
+     */
     pub launched: bool,
+
+    /**
+     * Is Some if there is a countdown time, is the time that the rocket should launch
+     */
     time_to_launch: Option<time::Tm>,
+
+    /**
+     * The launch output (set to high state to fire)
+     */
+    launch_out: ConfigLed,
     
     /**
      * Base ARM requirement, safety switch must be switched to on
@@ -61,12 +74,14 @@ impl Core {
             alive: true,
             launched: false,
             time_to_launch: None,
+            launch_out: ConfigLed::new(&config.fire_out),
             armed_status_led: ConfigLed::new(&config.armed_led),
             armed_safety_switch: ConfigButton::new(&config.arm_switch),
             log: Log::new(&format!("{}log{}", LOG_DIR, time::now().to_timespec().sec), config.log_config.log_limit),
             config: config
         };
         core.armed_changed();
+        core.launch_out.set(false);
         core
     }
 
@@ -139,14 +154,21 @@ impl Core {
             self.armed_changed();
         }
 
-        if self.is_counting_down() && self.countdown_time() < 0 && !self.launched {
+        if self.armed() && self.is_counting_down() && self.countdown_time() < 0 && !self.launched {
             self.launch();
             self.launched = true;
         }
     }
 
     fn launch(&mut self) {
-        self.log_mut().add(TAG, "I would launch here");
+        self.log_mut().add(TAG, "Setting FIRE_OUT to high");
+        self.launch_out.set(true);
+
+        //TODO: Improve this don't sleep here but have a timer
+        sleep_ms(50);
+
+        self.log_mut().add(TAG, "Setting FIRE_OUT to low");
+        self.launch_out.set(false);
     }
 
     pub fn begin_countdown(&mut self) {

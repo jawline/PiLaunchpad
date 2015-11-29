@@ -22,12 +22,12 @@ impl Status {
     fn make_countdown_string(core: &MutexGuard<Core>) -> String {
         if core.is_counting_down() {
             if core.countdown_time() >= 0 {
-                ("TTL: T-".to_string() + &core.countdown_time().to_string() + " seconds").to_string()
+                ("T-".to_string() + &core.countdown_time().to_string() + " seconds").to_string()
             } else {
-                ("TTL: T+".to_string() + &(-core.countdown_time()).to_string() + " seconds").to_string()
+                ("T+".to_string() + &(-core.countdown_time()).to_string() + " seconds").to_string()
             }
         } else {
-            "TTL: No launch planned".to_string()
+            "No launch planned".to_string()
         }
     }
 
